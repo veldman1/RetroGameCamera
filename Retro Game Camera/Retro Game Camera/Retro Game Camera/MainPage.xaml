@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:skia="clr-namespace:SkiaSharp.Views.Forms;assembly=SkiaSharp.Views.Forms"
+             mc:Ignorable="d"
+             x:Class="RetroGameCamera.MainPage"
+             Title="Retro Game Camera"
+             SizeChanged="ContentPage_SizeChanged">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="auto" />
+        </Grid.RowDefinitions>
+        <Label Grid.Row="0" Margin="5" Text="Retro Game Camera" VerticalOptions="Center" />
+        <skia:SKCanvasView Grid.Row="1"  x:Name="SkiaView" VerticalOptions="Fill" HorizontalOptions="Fill" />
+        <StackLayout Grid.Row="2" Padding="10" Orientation="Vertical">
+            <Label Text="Dithering Amount" />
+            <Slider x:Name="DitherSlider" DragCompleted="DitherSlider_DragCompleted" HorizontalOptions="Fill" Value=".5" Minimum="0" Maximum="1" />
+            <Label Text="Resolution" />
+            <Slider x:Name="RezSlider" DragCompleted="RezSlider_DragCompleted" HorizontalOptions="Fill" Value=".5" Minimum="0" Maximum="1" />
+            <StackLayout>
+                <Button Clicked="Button_Clicked" Text="Load Image" />
+                <Button Clicked="Save_Clicked" Text="Save Image" />
+            </StackLayout>
+
+        </StackLayout>
+    </Grid>
+</ContentPage>
