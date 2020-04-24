@@ -15,9 +15,15 @@
             <RowDefinition Height="1*" />
             <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
-        <Label Grid.Row="0" Margin="5" Text="Retro Game Camera" VerticalOptions="Center" />
+        <Grid BackgroundColor="Accent">
+            <Label Grid.Row="0" Margin="5" Text="Retro Game Camera" TextColor="White" HorizontalOptions="Center" FontSize="Large" FontAttributes="Bold" />
+        </Grid>
         <skia:SKCanvasView Grid.Row="1"  x:Name="SkiaView" VerticalOptions="Fill" HorizontalOptions="Fill" />
-        <StackLayout Grid.Row="2" Padding="10" Orientation="Vertical">
+        <StackLayout Grid.Row="2" Padding="10" Orientation="Vertical" VerticalOptions="End">
+            <Label Text="Color Palette" />
+            <Frame HorizontalOptions="Fill" VerticalOptions="Center" BorderColor="Accent" Padding="0">
+                <skia:SKCanvasView x:Name="PaletteSelection" Touch="PaletteSelection_Touch" EnableTouchEvents="True"  MinimumHeightRequest="20" Margin="0" />
+            </Frame>
             <Label Text="Dithering Amount" />
             <Slider x:Name="DitherSlider" DragCompleted="DitherSlider_DragCompleted" HorizontalOptions="Fill" Value=".5" Minimum="0" Maximum="1" />
             <Label Text="Resolution" />

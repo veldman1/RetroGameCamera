@@ -13,29 +13,31 @@ using SkiaSharp.Views.Forms;
 using SkiaSharp;
 using Color = Xamarin.Forms.Color;
 using Plugin.Media.Abstractions;
+using System.Collections.ObjectModel;
 
 namespace RetroGameCamera
 {
-    // Learn more about making custom code visible in the Xamarin.Forms previewer
-    // by visiting https://aka.ms/xamarinforms-previewer
     [DesignTimeVisible(false)]
     public partial class MainPage : ContentPage
     {
-        private SKBitmap DrawBitmap;
-        private SKBitmap UserPickedBitmap;
-        private SKBitmap ApplyDitherBitmap;
+        private SKBitmap _drawBitmap;
+        private SKBitmap _userPickedBitmap;
+        private SKBitmap _applyDitherBitmap;
+        private ColorPalette _selectedColorPalette;
 
         public MainPage()
         {
             InitializeComponent();
 
-            var canvasView = SkiaView;
-            canvasView.PaintSurface += OnCanvasViewPaintSurface;
+            SkiaView.PaintSurface += OnCanvasViewPaintSurface;
 
             SKRect bounds = new SKRect();
-            DrawBitmap = new SKBitmap((int)bounds.Right,
+            _drawBitmap = new SKBitmap((int)bounds.Right,
                                         (int)bounds.Height);
 
+            PaletteSelection.PaintSurface += OnPaletteViewPaintSurface;
+
+            _selectedColorPalette = ColorPaletteFactory.MakeAllPalettes()[0];
         }
 
         private void OnCanvasViewPaintSurface(object sender, SKPaintSurfaceEventArgs args)
@@ -46,10 +48,28 @@ namespace RetroGameCamera
 
             canvas.Clear();
 
-            float x = (info.Width - DrawBitmap.Width) / 2;
-            float y = (info.Height - DrawBitmap.Height) / 2;
+            float x = (info.Width - _drawBitmap.Width) / 2;
+            float y = (info.Height - _drawBitmap.Height) / 2;
 
-            canvas.DrawBitmap(DrawBitmap, x, y);
+            canvas.DrawBitmap(_drawBitmap, x, y);
+        }
+
+        private void OnPaletteViewPaintSurface(object sender, SKPaintSurfaceEventArgs args)
+        {
+            SKImageInfo info = args.Info;
+            SKSurface surface = args.Surface;
+            SKCanvas canvas = surface.Canvas;
+
+            canvas.Clear(new SKColor(100, 100, 200));
+
+            var cellWidth = info.Width / _selectedColorPalette.Colors.Count;
+            for (int i = 0; i < _selectedColorPalette.Colors.Count; i++)
+            {
+                var paint = new SKPaint();
+                paint.Color = _selectedColorPalette.Colors[i];
+                paint.Style = SKPaintStyle.Fill;
+                canvas.DrawRoundRect(new SKRoundRect(new SKRect(i * cellWidth, 0, (i * cellWidth) + cellWidth, info.Height), 5, 5), paint);
+            }
         }
 
         private async void Button_Clicked(object sender, EventArgs e)
@@ -61,17 +81,17 @@ namespace RetroGameCamera
 
             var pickPhoto = await CrossMedia.Current.PickPhotoAsync();
 
-            SKBitmap loadedBitmap = null;
             using (MemoryStream memStream = new MemoryStream())
             {
                 await pickPhoto.GetStreamWithImageRotatedForExternalStorage().CopyToAsync(memStream);
                 memStream.Seek(0, SeekOrigin.Begin);
 
-                UserPickedBitmap = SKBitmap.Decode(pickPhoto.GetStreamWithImageRotatedForExternalStorage());
+                _userPickedBitmap = SKBitmap.Decode(pickPhoto.GetStreamWithImageRotatedForExternalStorage());
             };
 
             await RezPickedBitmap();
             await CreateWithPickedBitmap();
+            await DrawScaledUpImage();
         }
 
         private async void Save_Clicked(object sender, EventArgs e)
@@ -88,7 +108,7 @@ namespace RetroGameCamera
             using (MemoryStream memStream = new MemoryStream())
             using (SKManagedWStream wstream = new SKManagedWStream(memStream))
             {
-                DrawBitmap.Encode(wstream, SKEncodedImageFormat.Jpeg, 90);
+                _drawBitmap.Encode(wstream, SKEncodedImageFormat.Jpeg, 90);
                 byte[] data = memStream.ToArray();
 
                 bool success = await DependencyService.Get<IPhotoLibrary>().SavePhotoAsync(data, path, "Retro16BitCamera" + DateTime.Now.Ticks + ".jpg");
@@ -106,81 +126,42 @@ namespace RetroGameCamera
 
         private async Task RezPickedBitmap()
         {
-            if (UserPickedBitmap == null)
+            if (_userPickedBitmap == null)
             {
                 return;
             }
             var rez = 100 + RezSlider.Value * 200;
-            ApplyDitherBitmap = new SKBitmap((int)rez, (int)(rez * (UserPickedBitmap.Height / UserPickedBitmap.Width)));
-            UserPickedBitmap.ScalePixels(ApplyDitherBitmap, SKFilterQuality.None);
+            _applyDitherBitmap = new SKBitmap((int)rez, (int)(rez * (_userPickedBitmap.Height / _userPickedBitmap.Width)));
+            _userPickedBitmap.ScalePixels(_applyDitherBitmap, SKFilterQuality.None);
         }
 
         private async Task CreateWithPickedBitmap()
         {
-            if (ApplyDitherBitmap == null)
+            if (_applyDitherBitmap == null)
             {
                 return;
             }
 
-            /*var colorList = new List<SKColor>()
+            for (int x = 0; x < _applyDitherBitmap.Width; x++)
             {
-                new SKColor(255, 0, 0),
-                new SKColor(255, 255, 0),
-                new SKColor(255, 255, 255),
-                new SKColor(255, 0, 255),
-                new SKColor(0, 255, 255),
-                new SKColor(0, 0, 255),
-            };*/
-
-            /*var colorList = new List<SKColor>()
-            {
-                new SKColor(155,188,15),
-                new SKColor(139,172,15),
-                new SKColor(48,98,48),
-                new SKColor(15,56,15),
-            };*/
-
-            var colorList = new List<SKColor>()
-            {
-                new SKColor(0, 0, 0),
-                new SKColor(255, 255, 255),
-                new SKColor(170, 255, 238),
-                new SKColor(204, 68, 204),
-                new SKColor(0, 204, 85),
-                new SKColor(0, 0, 170),
-                new SKColor(238, 238, 119),
-                new SKColor(221, 136, 85),
-                new SKColor(102, 68, 0),
-                new SKColor(255, 119, 119),
-                new SKColor(51, 51, 51),
-                new SKColor(119, 119, 119),
-                new SKColor(170, 255, 102),
-                new SKColor(0, 136, 255),
-                new SKColor(187, 187, 187),
-            };
-
-
-
-            for (int x = 0; x < ApplyDitherBitmap.Width; x++)
-            {
-                for (int y = 0; y < ApplyDitherBitmap.Height; y++)
+                for (int y = 0; y < _applyDitherBitmap.Height; y++)
                 {
-                    var pixel = ApplyDitherBitmap.GetPixel(x, y);
+                    var pixel = _applyDitherBitmap.GetPixel(x, y);
 
-                    var color1 = colorList.OrderBy(colorFromPalette => ColorDistance(pixel, colorFromPalette)).FirstOrDefault();
+                    var color1 = _selectedColorPalette.Colors.OrderBy(colorFromPalette => ColorDistance(pixel, colorFromPalette)).FirstOrDefault();
                     var colorDist1 = ColorDistance(pixel, color1);
-                    var color2 = colorList.OrderBy(colorFromPalette => ColorDistance(pixel, colorFromPalette)).ElementAt(1);
+                    var color2 = _selectedColorPalette.Colors.OrderBy(colorFromPalette => ColorDistance(pixel, colorFromPalette)).ElementAt(1);
                     var colorDist2 = ColorDistance(pixel, color2);
 
                     var ditherFactor = DitherSlider.Value * 50;
 
                     if (Math.Abs(colorDist1 - colorDist2) > ditherFactor || (x % 2 == y % 2))
                     {
-                        ApplyDitherBitmap.SetPixel(x, y, color1);
+                        _applyDitherBitmap.SetPixel(x, y, color1);
                     }
                     else
                     {
-                        ApplyDitherBitmap.SetPixel(x, y, color2);
+                        _applyDitherBitmap.SetPixel(x, y, color2);
                     }
                 }
             }
@@ -188,21 +169,24 @@ namespace RetroGameCamera
 
         private async Task DrawScaledUpImage()
         {
-            if (ApplyDitherBitmap == null)
+            if (_applyDitherBitmap == null)
             {
                 return;
             }
 
-            int newCanvasWidth = (int)SkiaView.CanvasSize.Width;
-            int newCanvasHeight = (int)(SkiaView.CanvasSize.Height * (SkiaView.CanvasSize.Width / SkiaView.CanvasSize.Height));
-            if ((int)SkiaView.CanvasSize.Width > (int)SkiaView.CanvasSize.Height)
-            {
-                newCanvasWidth = (int)(SkiaView.CanvasSize.Width * (SkiaView.CanvasSize.Height / SkiaView.CanvasSize.Width));
-                newCanvasHeight = (int)SkiaView.CanvasSize.Height;
+            if (SkiaView.CanvasSize.Width > 0) {            
+                int newCanvasWidth = (int)SkiaView.CanvasSize.Width;
+                int newCanvasHeight = (int)(SkiaView.CanvasSize.Height * (SkiaView.CanvasSize.Width / SkiaView.CanvasSize.Height));
+                if ((int)SkiaView.CanvasSize.Width > (int)SkiaView.CanvasSize.Height)
+                {
+                    newCanvasWidth = (int)(SkiaView.CanvasSize.Width * (SkiaView.CanvasSize.Height / SkiaView.CanvasSize.Width));
+                    newCanvasHeight = (int)SkiaView.CanvasSize.Height;
+                }
+
+                _drawBitmap = new SKBitmap(newCanvasWidth, newCanvasHeight);
             }
 
-            DrawBitmap = new SKBitmap(newCanvasWidth, newCanvasHeight);
-            ApplyDitherBitmap.ScalePixels(DrawBitmap, SKFilterQuality.None);
+            _applyDitherBitmap.ScalePixels(_drawBitmap, SKFilterQuality.None);
 
             SkiaView.InvalidateSurface();
         }
@@ -232,7 +216,26 @@ namespace RetroGameCamera
 
         private async void ContentPage_SizeChanged(object sender, EventArgs e)
         {
-            DrawScaledUpImage();
+            await DrawScaledUpImage();
+        }
+
+        private async void PaletteSelection_Touch(object sender, SKTouchEventArgs e)
+        {
+            if (e.MouseButton == SKMouseButton.Left && e.ActionType == SKTouchAction.Pressed)
+            {
+                var paletteSelectPage = new ColorPaletteSelectPage(PaletteSelectCallback);
+                await Navigation.PushModalAsync(paletteSelectPage, true);
+            }
+        }
+
+        private async void PaletteSelectCallback(ColorPaletteSelectPage page)
+        {
+            _selectedColorPalette = page.Selected;
+            await RezPickedBitmap();
+            await CreateWithPickedBitmap();
+            await DrawScaledUpImage();
+            PaletteSelection.InvalidateSurface();
+
         }
     }
 }
