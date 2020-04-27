@@ -7,8 +7,8 @@
     <ProjectGuid>{F3DDCA19-B43E-4882-B255-72EAB17B0782}</ProjectGuid>
     <OutputType>AppContainerExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Retro_Game_Camera.UWP</RootNamespace>
-    <AssemblyName>Retro Game Camera.UWP</AssemblyName>
+    <RootNamespace>RetroGameCamera.UWP</RootNamespace>
+    <AssemblyName>RetroGameCamera.UWP</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
     <TargetPlatformVersion>10.0.18362.0</TargetPlatformVersion>
@@ -152,7 +152,7 @@
     <PackageReference Include="Xamarin.Essentials" Version="1.5.3.1" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Retro Game Camera\Retro Game Camera.csproj">
+    <ProjectReference Include="..\RetroGameCamera\RetroGameCamera.csproj">
       <Project>{038aa126-dcf7-4d16-851f-58c43ce05dd5}</Project>
       <Name>Retro Game Camera</Name>
     </ProjectReference>

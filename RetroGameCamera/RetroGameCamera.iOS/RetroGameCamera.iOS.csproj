@@ -9,9 +9,9 @@
     <ProjectTypeGuids>{FEACFBD2-3405-455C-9665-78FE426C6842};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <TemplateGuid>{6143fdea-f3c2-4a09-aafa-6e230626515e}</TemplateGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>Retro_Game_Camera.iOS</RootNamespace>
+    <RootNamespace>RetroGameCamera.iOS</RootNamespace>
     <IPhoneResourcePrefix>Resources</IPhoneResourcePrefix>
-    <AssemblyName>Retro Game Camera.iOS</AssemblyName>
+    <AssemblyName>RetroGameCamera.iOS</AssemblyName>
     <MtouchEnableSGenConc>true</MtouchEnableSGenConc>
     <MtouchHttpClientHandler>NSUrlSessionHandler</MtouchHttpClientHandler>
   </PropertyGroup>
@@ -129,7 +129,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <ItemGroup>
-    <ProjectReference Include="..\Retro Game Camera\Retro Game Camera.csproj">
+    <ProjectReference Include="..\RetroGameCamera\RetroGameCamera.csproj">
       <Project>{038aa126-dcf7-4d16-851f-58c43ce05dd5}</Project>
       <Name>Retro Game Camera</Name>
     </ProjectReference>

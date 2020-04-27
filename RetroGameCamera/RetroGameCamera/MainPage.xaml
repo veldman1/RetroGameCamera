@@ -16,7 +16,7 @@
             <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
         <Grid BackgroundColor="Accent">
-            <Label Grid.Row="0" Margin="5" Text="Retro Game Camera" TextColor="White" HorizontalOptions="Center" FontSize="Large" FontAttributes="Bold" />
+            <Label Grid.Row="0" Margin="5" Text="RetroGameCamera" TextColor="White" HorizontalOptions="Center" FontSize="Large" FontAttributes="Bold" />
         </Grid>
         <skia:SKCanvasView Grid.Row="1"  x:Name="SkiaView" VerticalOptions="Fill" HorizontalOptions="Fill" />
         <StackLayout Grid.Row="2" Padding="10" Orientation="Vertical" VerticalOptions="End">

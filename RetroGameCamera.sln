@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29519.87
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retro Game Camera.UWP", "Retro Game Camera\Retro Game Camera.UWP\Retro Game Camera.UWP.csproj", "{F3DDCA19-B43E-4882-B255-72EAB17B0782}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RetroGameCamera.UWP", "RetroGameCamera\RetroGameCamera.UWP\RetroGameCamera.UWP.csproj", "{F3DDCA19-B43E-4882-B255-72EAB17B0782}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retro Game Camera.Android", "Retro Game Camera\Retro Game Camera.Android\Retro Game Camera.Android.csproj", "{93AEFA6B-EAE4-4505-B1AD-FD90711F7446}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RetroGameCamera.Android", "RetroGameCamera\RetroGameCamera.Android\RetroGameCamera.Android.csproj", "{93AEFA6B-EAE4-4505-B1AD-FD90711F7446}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retro Game Camera.iOS", "Retro Game Camera\Retro Game Camera.iOS\Retro Game Camera.iOS.csproj", "{4272F952-FC6A-4F0A-8E95-7B8FC5021D52}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RetroGameCamera.iOS", "RetroGameCamera\RetroGameCamera.iOS\RetroGameCamera.iOS.csproj", "{4272F952-FC6A-4F0A-8E95-7B8FC5021D52}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retro Game Camera", "Retro Game Camera\Retro Game Camera\Retro Game Camera.csproj", "{038AA126-DCF7-4D16-851F-58C43CE05DD5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RetroGameCamera", "RetroGameCamera\RetroGameCamera\RetroGameCamera.csproj", "{038AA126-DCF7-4D16-851F-58C43CE05DD5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -81,6 +81,11 @@ namespace RetroGameCamera
 
             var pickPhoto = await CrossMedia.Current.PickPhotoAsync();
 
+            if (pickPhoto == null)
+            {
+                return;
+            }
+
             using (MemoryStream memStream = new MemoryStream())
             {
                 await pickPhoto.GetStreamWithImageRotatedForExternalStorage().CopyToAsync(memStream);
@@ -118,7 +123,7 @@ namespace RetroGameCamera
                     await DisplayAlert("Save Issue", "Could not save to photo library.", "OK");
                 } else
                 {
-                    await DisplayAlert("Saved", "Saved file to photo library.", "OK");
+                    await DisplayAlert("Saved", "Saved file to " + path, "OK");
                 }
             }
 
