@@ -7,15 +7,15 @@
   IgnorableNamespaces="uap mp">
 
   <Identity
-    Name="a3320c65-9993-408d-9e37-c5bf78249667"
-    Publisher="CN=9d42d1dc-f161-48cc-99a5-15ba7a01ae04"
-    Version="1.0.0.0" />
+    Name="12360Veldynamics.RetroGameCamera"
+    Publisher="CN=19AD3AF2-F5FF-43ED-B8B4-E4171B803F7A"
+    Version="1.0.3.0" />
 
-  <mp:PhoneIdentity PhoneProductId="ec0cc741-fd3e-485c-81be-68815c480690" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
+  <mp:PhoneIdentity PhoneProductId="de23255e-22dd-4aa5-9df4-2ecacfe7d021" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
   <Properties>
-    <DisplayName>Retro_Game_Camera.UWP</DisplayName>
-    <PublisherDisplayName>9d42d1dc-f161-48cc-99a5-15ba7a01ae04</PublisherDisplayName>
+    <DisplayName>Retro Game Camera</DisplayName>
+    <PublisherDisplayName>Veldynamics</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
 
@@ -30,12 +30,12 @@
   <Applications>
     <Application Id="App"
       Executable="$targetnametoken$.exe"
-      EntryPoint="Retro_Game_Camera.UWP.App">
+      EntryPoint="RetroGameCamera.UWP.App">
       <uap:VisualElements
-        DisplayName="Retro_Game_Camera.UWP"
+        DisplayName="Retro Game Camera"
         Square150x150Logo="Assets\Square150x150Logo.png"
         Square44x44Logo="Assets\Square44x44Logo.png"
-        Description="Retro_Game_Camera.UWP"
+        Description="Retro Game Camera Windows"
         BackgroundColor="transparent">
         <uap:DefaultTile Wide310x150Logo="Assets\Wide310x150Logo.png" Square310x310Logo="Assets\LargeTile.png" Square71x71Logo="Assets\SmallTile.png">
           <uap:ShowNameOnTiles>

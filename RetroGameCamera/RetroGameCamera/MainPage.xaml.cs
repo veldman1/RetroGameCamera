@@ -38,6 +38,11 @@ namespace RetroGameCamera
             PaletteSelection.PaintSurface += OnPaletteViewPaintSurface;
 
             _selectedColorPalette = ColorPaletteFactory.MakeAllPalettes()[0];
+
+            if (Device.RuntimePlatform == Device.UWP)
+            {
+                AppTitle.IsVisible = false;
+            }
         }
 
         private void OnCanvasViewPaintSurface(object sender, SKPaintSurfaceEventArgs args)
@@ -92,6 +97,14 @@ namespace RetroGameCamera
                 memStream.Seek(0, SeekOrigin.Begin);
 
                 _userPickedBitmap = SKBitmap.Decode(pickPhoto.GetStreamWithImageRotatedForExternalStorage());
+
+                //double ratio = (double)_userPickedBitmap.Width / (double)_userPickedBitmap.Height;
+                //if (_userPickedBitmap.Height > 500)
+                //{
+                //    var newUserPicked = new SKBitmap((int)(ratio * 500), 500);
+                //    _userPickedBitmap.ScalePixels(newUserPicked, SKFilterQuality.High);
+                //    _userPickedBitmap = newUserPicked;
+                //}
             };
 
             await RezPickedBitmap();
@@ -121,7 +134,8 @@ namespace RetroGameCamera
                 if (!success)
                 {
                     await DisplayAlert("Save Issue", "Could not save to photo library.", "OK");
-                } else
+                }
+                else
                 {
                     await DisplayAlert("Saved", "Saved file to " + path, "OK");
                 }
@@ -136,7 +150,7 @@ namespace RetroGameCamera
                 return;
             }
             var rez = 100 + RezSlider.Value * 200;
-            _applyDitherBitmap = new SKBitmap((int)rez, (int)(rez * (_userPickedBitmap.Height / _userPickedBitmap.Width)));
+            _applyDitherBitmap = new SKBitmap((int)rez, (int)(rez * (_userPickedBitmap.Height / (double)_userPickedBitmap.Width)));
             _userPickedBitmap.ScalePixels(_applyDitherBitmap, SKFilterQuality.None);
         }
 
@@ -179,12 +193,13 @@ namespace RetroGameCamera
                 return;
             }
 
-            if (SkiaView.CanvasSize.Width > 0) {            
+            if (SkiaView.CanvasSize.Width > 0)
+            {
                 int newCanvasWidth = (int)SkiaView.CanvasSize.Width;
-                int newCanvasHeight = (int)(SkiaView.CanvasSize.Height * (SkiaView.CanvasSize.Width / SkiaView.CanvasSize.Height));
+                int newCanvasHeight = (int)(SkiaView.CanvasSize.Width * (_applyDitherBitmap.Height / (double)_applyDitherBitmap.Width));
                 if ((int)SkiaView.CanvasSize.Width > (int)SkiaView.CanvasSize.Height)
                 {
-                    newCanvasWidth = (int)(SkiaView.CanvasSize.Width * (SkiaView.CanvasSize.Height / SkiaView.CanvasSize.Width));
+                    newCanvasWidth = (int)(SkiaView.CanvasSize.Height * (_applyDitherBitmap.Width / (double)_applyDitherBitmap.Height));
                     newCanvasHeight = (int)SkiaView.CanvasSize.Height;
                 }
 
@@ -207,9 +222,11 @@ namespace RetroGameCamera
 
         private async void DitherSlider_DragCompleted(object sender, EventArgs e)
         {
+
             await RezPickedBitmap();
             await CreateWithPickedBitmap();
             await DrawScaledUpImage();
+
         }
 
         private async void RezSlider_DragCompleted(object sender, EventArgs e)
@@ -217,11 +234,14 @@ namespace RetroGameCamera
             await RezPickedBitmap();
             await CreateWithPickedBitmap();
             await DrawScaledUpImage();
+
         }
 
         private async void ContentPage_SizeChanged(object sender, EventArgs e)
         {
+
             await DrawScaledUpImage();
+
         }
 
         private async void PaletteSelection_Touch(object sender, SKTouchEventArgs e)
